@@ -107,7 +107,7 @@ abstract class ORM
         $properties = $class->getProperties(ReflectionProperty::IS_PUBLIC);
 
         foreach ($properties as $property):
-            if (!$property->isInitialized() or empty($property)) continue;
+            if (!empty($property)) continue;
             $propertyName = $property->getName();
             $propsToImplode[] = '`' . $propertyName . '` = ":' . $propertyName . '"';
         endforeach;

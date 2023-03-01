@@ -51,22 +51,6 @@ abstract class AbstractControllers
         echo json_encode($object);
     }
 
-    private function CallingFunctionName()
-    {
-
-        $ex = new Exception();
-        $trace = $ex->getTrace();
-        return $trace[2]['function'];
-    }
-
-    private function CallingClassName()
-    {
-
-        $ex = get_class($this);
-        $trace = explode(DIRECTORY_SEPARATOR, $ex);
-        return $trace[count($trace) - 1];
-    }
-
     /**
      * @param string|null $templatePath
      * @param array|null $params
@@ -98,25 +82,14 @@ abstract class AbstractControllers
     }
 
     /**
-     * @param string $newPath
-     *
-     * @return void
-     * @throws ReflectionException
-     */
-    #[NoReturn] protected function redirect(string $newPath): void
-    {
-        $route = $this->returnRoute($newPath);
-        header('Location: ' . $route);
-        exit;
-    }
-
-    /**
      * @param string|null $routeName
      * @param array|null $params
      *
      * @return array|string
      * @throws ReflectionException
+     * @throws Exception
      */
+
     public function returnRoute(?string $routeName = NULL, ?array $params = []): array|string
     {
         $routes = (new Main('App\\controllers'))->getRoute();
@@ -124,6 +97,7 @@ abstract class AbstractControllers
             return $routes;
         else:
             $route = array_filter($routes, fn(RouteAttribute $el) => $el->getName() == $routeName);
+            if (empty($route)) throw new Exception("No route found");
             $path = array_values($route)[0]->getPath();
             if (str_contains($path, ":")):
                 $re = '/:.+/m';
@@ -134,6 +108,22 @@ abstract class AbstractControllers
             endif;
             return $path;
         endif;
+    }
+
+    private function CallingClassName()
+    {
+
+        $ex = get_class($this);
+        $trace = explode(DIRECTORY_SEPARATOR, $ex);
+        return $trace[count($trace) - 1];
+    }
+
+    private function CallingFunctionName()
+    {
+
+        $ex = new Exception();
+        $trace = $ex->getTrace();
+        return $trace[2]['function'];
     }
 
     /**
@@ -148,5 +138,18 @@ abstract class AbstractControllers
         endforeach;
 
         return $entity;
+    }
+
+    /**
+     * @param string $newPath
+     *
+     * @return void
+     * @throws ReflectionException
+     */
+    #[NoReturn] protected function redirect(string $newPath): void
+    {
+        $route = $this->returnRoute($newPath);
+        header('Location: ' . $route);
+        exit;
     }
 }
