@@ -62,14 +62,14 @@ abstract class ORM
             if (array_key_exists('conditions', $options)):
                 foreach ($options['conditions'] as $key => $value):
                     $propertyValue = (is_array($value) or is_object($value)) ? json_encode($value) : $value;
-                    $sql->bindParam(':' . $key, $value, $this->getType(gettype($propertyValue)));
+                    $sql->bindParam(':' . $key, $propertyValue, $this->getType(gettype($propertyValue)));
+                    var_dump(':' . $key);
                 endforeach;
             endif;
         endif;
-        $sql->execute();
-        if ($this->_pdo->errorCode())
-            throw new ORMException($this->_pdo->errorInfo()[2]);
-        return $sql->fetchAll(PDO::FETCH_CLASS, self::class) ?? [];
+        if (!$sql->execute())
+            throw new ORMException("Une erreur c'est produit: " . $sql->queryString);
+        return $sql->fetchAll(PDO::FETCH_CLASS, get_class($this)) ?? [];
     }
 
     /**
