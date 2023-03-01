@@ -63,7 +63,6 @@ abstract class ORM
                 foreach ($options['conditions'] as $key => $value):
                     $propertyValue = (is_array($value) or is_object($value)) ? json_encode($value) : $value;
                     $sql->bindParam(':' . $key, $propertyValue, $this->getType(gettype($propertyValue)));
-                    var_dump(':' . $key);
                 endforeach;
             endif;
         endif;
