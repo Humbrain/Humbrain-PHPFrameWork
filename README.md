@@ -18,7 +18,29 @@ ___
 ## Usage/Examples
 
 ___
+### Configuration
+> You need .env and .htaccess for work corectly
 
+`.env`
+````dotenv
+debug=false
+HOST="localhost"
+HOST_DB="test"
+HOST_URL="mysql:host=${HOST};dbname=${sncf_suppeo};charset=utf8"
+DB_USER="steodec"
+DB_PASSWORD="Myszkowski98"
+````
+`.htacess`
+````apacheconf
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+
+<Files .env>
+    Order allow,deny
+    Deny from all
+</Files>
+````
 ### Create Route
 
 ````php
@@ -55,7 +77,10 @@ class PostModel extends Entity {
     }
         
 }
-
+````
+### Use Model
+````php
+<?php
 //PostController.php
 namespace App\controllers
 
@@ -78,7 +103,6 @@ class PostController extends AbstractControllers {
         $post->save();
     }
 }
-?>
 ````
 
 ### Fetch data from base
