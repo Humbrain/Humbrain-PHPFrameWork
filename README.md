@@ -14,7 +14,7 @@ ___
 ### Or
 
 > Install with all project with
-> ``composer project ...``
+> ``composer create-project humbrain/php-project``
 
 ## Usage/Examples
 
