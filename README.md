@@ -1,6 +1,7 @@
 # SteoFrameWork
 
 [![Generic badge](https://img.shields.io/badge/Version-2.0.0-green.svg?style=flat-square)](https://shields.io/)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg?style=flat-square)](https://github.com/Humbrain/Humbrain-PHPFrameWork/blob/main/LICENSE)
 > A simple framework with Router and ORM
 ___
 
